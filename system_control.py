@@ -1,6 +1,6 @@
 import socket
 import threading
-
+import customtkinter
 class Main_system:
     def __init__(self):
         self.HEADER = 2084
@@ -20,6 +20,14 @@ class Main_system:
     def handle_client(self,conn,addr):
         connected = True
         self.server.setblocking(False)
+
+        # new_window = customtkinter.CTkToplevel()
+        # new_window.title(f"Connection {self.Connections}: {addr}")
+        # new_window.geometry("400x300")
+
+        # output_box = customtkinter.CTkTextbox(master=new_window)
+        # output_box.grid(column = 0, row = 0)
+        # output_box.insert(customtkinter.END,text="Client Started")
         
         while connected:
             client_msg = conn.recv(2048).decode(self.FORMAT)
@@ -31,6 +39,7 @@ class Main_system:
                     print("Error:",e)
         while connected:
             if client_msg != None:
+                # output_box.insert(customtkinter.END,text=f"\n{client_msg}")
                 print(client_msg)
             try:
                 conn.send(str.encode(self.gui_msg,encoding=self.FORMAT))
@@ -65,6 +74,9 @@ class Main_system:
                     thread = threading.Thread(target=self.handle_client,args=(conn,addr))
                     thread.start()
                     print(f"[ACTIVE CONNECTIONS]{self.Connections}")
+
+                    
+                    #get output box
                 except BlockingIOError:
                     pass
 

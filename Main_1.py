@@ -29,8 +29,12 @@ def shut_computers_fun():
 
 def send_message():
     master.gui_msg = user_input.get()
-    sleep(0.001)
+    #need better system other than wait a bit till the system gets it thats stupid
+    sleep(0.1)
     master.gui_msg = ""
+
+
+
 
 
 Connection_frame = customtkinter.CTkFrame(root)
@@ -45,8 +49,12 @@ close_listen_btn.grid(row=0, column=1,padx=10)
 shut_computers_btn = customtkinter.CTkButton(Connection_frame, text="System_shutdown",command=shut_computers_fun)
 shut_computers_btn.grid(row=0, column=2,padx=10,pady=20)
 
-text_input = customtkinter.CTkEntry(Connection_frame,textvariable=user_input,width= 50).grid(row=1,column=0)
+text_input = customtkinter.CTkEntry(Connection_frame,textvariable=user_input,width= 50)
+text_input.grid(row=1,column=0)
 
-submit_btn = customtkinter.CTkButton(Connection_frame, text="Submit",command= send_message).grid(row=2,column=0)
+submit_btn = customtkinter.CTkButton(Connection_frame, text="Submit",command= send_message)
+submit_btn.grid(row=2,column=0)
+
+
 
 root.mainloop()
