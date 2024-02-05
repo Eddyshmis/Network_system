@@ -18,21 +18,37 @@ class Main_system:
         self.gui_msg = ""
 
     def new_window_client(self,conn,addr):
+        user_input = customtkinter.StringVar()
+        user_input.set("")
+
         def close_client(conn):
             self.Connections -= 1
             self.new_window.destroy()
             conn.close()
+        def send_message(conn):
+            conn.send(str.encode(user_input.get(),encoding=self.FORMAT))
+
+        
 
         self.new_window = customtkinter.CTkToplevel()
         self.new_window.title(f"Connection {self.Connections}: {addr}")
-        self.new_window.geometry("500x300")
+        self.new_window.geometry("500x550")
 
         self.output_box = customtkinter.CTkTextbox(master= self.new_window,width=500,height=300)
-        self.output_box.grid(column = 0, row = 0)
+        self.output_box.grid(row = 0,column = 0)
         self.output_box.insert(customtkinter.END,text="Client Started")
 
+        
+
         close_btn = customtkinter.CTkButton(self.new_window,text="close",command=lambda:close_client(conn))
-        close_btn.grid(column = 0, row = 1)
+        close_btn.grid(row = 1,column = 0,pady = 20)
+
+        text_input = customtkinter.CTkEntry(self.new_window,textvariable=user_input,width= 100)
+        text_input.grid(row=2,column=0,pady = 5)
+
+        submit_btn = customtkinter.CTkButton(self.new_window, text="Submit",command= lambda:send_message(conn))
+        submit_btn.grid(row=3,column=0)
+        
 
     
     def handle_client(self,conn,addr):
@@ -52,6 +68,7 @@ class Main_system:
         while self.connected:
             if client_msg != None:
                 self.output_box.insert(customtkinter.END,text=f"\n{client_msg}")
+                self.output_box.see("end")
                 # print(client_msg)
             try:
                 conn.send(str.encode(self.gui_msg,encoding=self.FORMAT))

