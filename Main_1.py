@@ -6,7 +6,7 @@ from time import sleep
 
 root = customtkinter.CTk()
 root.geometry("500x200")
-
+root.title("MASTER")
 
 
 
@@ -20,7 +20,7 @@ def connect_comps():
     master.start_server()
 
 def close_listen_fun():
-    master.server.close()
+    master.connected = False
 
 def shut_computers_fun():
     master.gui_msg = "shutdown /s"
@@ -30,7 +30,7 @@ def shut_computers_fun():
 def send_message():
     master.gui_msg = user_input.get()
     #need better system other than wait a bit till the system gets it thats stupid
-    sleep(0.1)
+    sleep(0.01)
     master.gui_msg = ""
 
 
@@ -49,7 +49,7 @@ close_listen_btn.grid(row=0, column=1,padx=10)
 shut_computers_btn = customtkinter.CTkButton(Connection_frame, text="System_shutdown",command=shut_computers_fun)
 shut_computers_btn.grid(row=0, column=2,padx=10,pady=20)
 
-text_input = customtkinter.CTkEntry(Connection_frame,textvariable=user_input,width= 50)
+text_input = customtkinter.CTkEntry(Connection_frame,textvariable=user_input,width= 100)
 text_input.grid(row=1,column=0)
 
 submit_btn = customtkinter.CTkButton(Connection_frame, text="Submit",command= send_message)

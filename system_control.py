@@ -16,20 +16,32 @@ class Main_system:
         self.server.setblocking(True)
         self.Connections = 0
         self.gui_msg = ""
+
+    def new_window_client(self,conn,addr):
+        def close_client(conn):
+            self.Connections -= 1
+            self.new_window.destroy()
+            conn.close()
+
+        self.new_window = customtkinter.CTkToplevel()
+        self.new_window.title(f"Connection {self.Connections}: {addr}")
+        self.new_window.geometry("500x300")
+
+        self.output_box = customtkinter.CTkTextbox(master= self.new_window,width=500,height=300)
+        self.output_box.grid(column = 0, row = 0)
+        self.output_box.insert(customtkinter.END,text="Client Started")
+
+        close_btn = customtkinter.CTkButton(self.new_window,text="close",command=lambda:close_client(conn))
+        close_btn.grid(column = 0, row = 1)
+
     
     def handle_client(self,conn,addr):
-        connected = True
+        self.connected = True
         self.server.setblocking(False)
 
-        # new_window = customtkinter.CTkToplevel()
-        # new_window.title(f"Connection {self.Connections}: {addr}")
-        # new_window.geometry("400x300")
-
-        # output_box = customtkinter.CTkTextbox(master=new_window)
-        # output_box.grid(column = 0, row = 0)
-        # output_box.insert(customtkinter.END,text="Client Started")
+        self.new_window_client(conn,addr)
         
-        while connected:
+        while self.connected:
             client_msg = conn.recv(2048).decode(self.FORMAT)
             if client_msg == "!Connected":
                 try:
@@ -37,10 +49,10 @@ class Main_system:
                     break
                 except Exception as e:
                     print("Error:",e)
-        while connected:
+        while self.connected:
             if client_msg != None:
-                # output_box.insert(customtkinter.END,text=f"\n{client_msg}")
-                print(client_msg)
+                self.output_box.insert(customtkinter.END,text=f"\n{client_msg}")
+                # print(client_msg)
             try:
                 conn.send(str.encode(self.gui_msg,encoding=self.FORMAT))
                 try:
@@ -52,6 +64,9 @@ class Main_system:
                 break
             except Exception as e:
                 print("Error:",e)
+        self.Connections -= 1
+        self.new_window.destroy()
+        conn.close()
             
 
 
