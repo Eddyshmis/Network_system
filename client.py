@@ -49,7 +49,7 @@ while True:
                 if len(output) > 2048:
                     test.send("output too large")
 
-                test.send(str(output))
+                test.send(str(output.decode('utf-8')))
             except Exception as e:
                 test.send(str(e))
                 
